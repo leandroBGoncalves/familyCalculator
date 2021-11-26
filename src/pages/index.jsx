@@ -1,6 +1,11 @@
+import Head from 'next/head';
 
 export default function Home() {
   return (
-   <h5>Hellow Wolrd</h5>
+    <>
+    <Head>
+      <title>Home | family calculator</title>
+    </Head>
+   </>
   )
 }
