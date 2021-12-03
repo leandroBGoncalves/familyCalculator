@@ -1,0 +1,58 @@
+.ContainerModal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.TitleModal {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;
+    background: var(--blue);
+    padding-left: 20px;
+    padding-right: 20px;
+
+    font-size: 1rem;
+    color: #fff;
+
+    h3 {
+        cursor: pointer;
+    }
+}
+
+.inputTitle {
+    margin-bottom: 20px;
+}
+
+.interruptors {
+    padding: 10px 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.boxBTN {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.BTN_SaveTransaction {
+    width: 200px;
+    height: 3rem;
+    background: var(--blue-ligth);
+    border: none;
+    border-radius: 4px;
+
+    font-size: 1rem;
+    color: #fff;
+
+    transition: filter 0.2s;
+        &:hover {
+            filter: brightness(0.9);
+        }
+}
