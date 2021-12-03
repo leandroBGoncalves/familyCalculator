@@ -15,24 +15,20 @@ export default function TrasactionTable() {
                     </tr>
                 </thead>
 
-                {/*<tbody>
-                        {transactions.map(transaction =>(
-                                <tr key={transaction.id}>
-                                <td>{transaction.title}</td>
-                                <td className={transaction.type}>{new Intl.NumberFormat('pt-BR', {
-                                    style: 'currency',
-                                    currency: 'BRL'
-                                }).format(transaction.amount)}
-
-                                </td>
-                                <td>{transaction.category}</td>
-                                <td>{new Intl.DateTimeFormat('pt-BR', {
-                                }).format(
-                                    new Date(transaction.createdAt))}
-                                </td>
-                            </tr>
-                        ))}
-                </tbody>*/}
+                <tbody>
+                    <tr>
+                        <td>Luz</td>
+                        <td className={styles.withdraw}>{new Intl.NumberFormat('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL'
+                        }).format(17000)}
+                        </td>
+                        <td>Saidas</td>
+                        <td>
+                            02/12/2021
+                        </td>
+                    </tr>
+                </tbody>
             </table>
         </div>
     )

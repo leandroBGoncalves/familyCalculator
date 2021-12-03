@@ -5,7 +5,7 @@ export default function Home() {
     <>
     <Head>
       <title>Home | family calculator</title>
-    </Head>
+    </Head>     
    </>
   )
 }
