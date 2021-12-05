@@ -1,7 +1,9 @@
 
+import { useEffect } from 'react'
 import styles from './style.module.scss'
 
 export default function TrasactionTable() {
+
 
     return (
         <div className={styles.ContainerTransactionTable}>

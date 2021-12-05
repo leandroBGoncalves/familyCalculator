@@ -14,12 +14,13 @@ import {
 
 import styles from "./styleModal.module.scss";
 
+
 export default function ModalTransactions({ open, handleClose }) {
-  const [amount, setAmount] = useState();
+  const [amount, setAmount] = useState('');
   const [checked, setChecked] = useState(false);
   const [titleAmount, setTitleAmount] = useState('');
   const [type, setType] = useState('entrada')
-  const [dateCreated, setDateCreated] = useState()
+  const [dateCreated, setDateCreated] = useState('10/10/2021')
 
   const handleChange = (event) => {
     setChecked(event.target.checked);
