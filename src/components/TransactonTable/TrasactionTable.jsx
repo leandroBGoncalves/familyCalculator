@@ -1,9 +1,8 @@
 
-import { useEffect } from 'react'
+import moment from 'moment';
 import styles from './style.module.scss'
 
-export default function TrasactionTable() {
-
+export default function TrasactionTable({data}) {
 
     return (
         <div className={styles.ContainerTransactionTable}>
@@ -18,18 +17,22 @@ export default function TrasactionTable() {
                 </thead>
 
                 <tbody>
-                    <tr>
-                        <td>Luz</td>
+                    {data.map((dados) => {
+                    return (
+                    <tr key={dados.id}>
+                        <td>{dados.title}</td>
                         <td className={styles.withdraw}>{new Intl.NumberFormat('pt-BR', {
                             style: 'currency',
                             currency: 'BRL'
-                        }).format(17000)}
+                        }).format(dados.amount)}
                         </td>
-                        <td>Saidas</td>
+                        <td>{dados.category}</td>
                         <td>
-                            02/12/2021
+                        {moment(dados.inserted_at).format("DD/MM/YYYY")}
                         </td>
                     </tr>
+                    )
+                    })}
                 </tbody>
             </table>
         </div>

@@ -3,11 +3,12 @@ import TrasactionTable from "../TransactonTable/TrasactionTable";
 
 import styles from './style.module.scss'
 
-export default function Dashboard() {
+export default function Dashboard({data}) {
     return (
         <div className={styles.ContainerDashBoard}>
             <Summary />
-            <TrasactionTable />
+            <TrasactionTable data={data}/>
+          
         </div>
     );
 }

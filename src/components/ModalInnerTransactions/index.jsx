@@ -13,6 +13,7 @@ import {
 } from "@material-ui/core";
 
 import styles from "./styleModal.module.scss";
+import { supabase } from "../../services/supraClient";
 
 
 export default function ModalTransactions({ open, handleClose }) {
@@ -20,7 +21,33 @@ export default function ModalTransactions({ open, handleClose }) {
   const [checked, setChecked] = useState(false);
   const [titleAmount, setTitleAmount] = useState('');
   const [type, setType] = useState('entrada')
-  const [dateCreated, setDateCreated] = useState('10/10/2021')
+  const [dateCreated, setDateCreated] = useState()
+
+  const dateTime = new Date()
+  
+  async function InsertData() {
+    await supabase
+    .from('despesasmes')
+    .insert([
+      {
+        inserted_at: dateCreated, 
+        title: titleAmount, 
+        amount: amount,
+        category: type,
+      }
+    ]).then(() => {
+      window.alert('sucesso')
+    })
+  }
+  
+  function insertDateTime() {
+    setDateCreated(dateTime)
+    setTimeout(() => {
+      InsertData()
+    }, 2000);
+  }
+
+
 
   const handleChange = (event) => {
     setChecked(event.target.checked);
@@ -83,7 +110,8 @@ export default function ModalTransactions({ open, handleClose }) {
           </FormControl>
         </div>
         <div className={styles.boxBTN}>
-          <button className={styles.BTN_SaveTransaction}>
+          <button onClick={insertDateTime}
+          className={styles.BTN_SaveTransaction}>
             Salvar
           </button>
         </div>
