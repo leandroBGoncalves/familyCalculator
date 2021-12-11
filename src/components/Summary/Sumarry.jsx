@@ -1,10 +1,11 @@
 
+import { useEffect, useState } from 'react'
 import styles from './style.module.scss'
 
-export default function Summary() {
+export default function Summary({data}) {
 
-    {/*const cardsValues = transactions.reduce((acc, transaction) => {
-        if(transaction.type === 'deposit') {
+    const cardsValues = data.reduce((acc, transaction) => {
+        if(transaction.category === 'entrada') {
             acc.deposits += transaction.amount;
             acc.total += transaction.amount;
         } else {
@@ -12,11 +13,13 @@ export default function Summary() {
             acc.total -= transaction.amount; 
         }
         return acc;
-    }, {
-        deposits: 0,
-        withdraws: 0,
-        total: 0,
-    })*/}
+        }, {
+            deposits: 0,
+            withdraws: 0,
+            total: 0,
+        })
+
+
 
     return (
         <div className={styles.ConatinerSummary}>
@@ -26,7 +29,7 @@ export default function Summary() {
                     <img src="/images/income.svg" alt="Entradas"/>
                 </header>
                 <strong>
-                    1500
+                    {new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'}).format(cardsValues.deposits)}
                 </strong>
             </div>
             <div>

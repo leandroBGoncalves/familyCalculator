@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   FormControl,
@@ -14,40 +14,42 @@ import {
 
 import styles from "./styleModal.module.scss";
 import { supabase } from "../../services/supraClient";
+import moment from "moment";
 
 
-export default function ModalTransactions({ open, handleClose }) {
-  const [amount, setAmount] = useState('');
+export default function ModalTransactions({ open, handleClose, getData }) {
+  const [amount, setAmount] = useState(0);
   const [checked, setChecked] = useState(false);
   const [titleAmount, setTitleAmount] = useState('');
-  const [type, setType] = useState('entrada')
-  const [dateCreated, setDateCreated] = useState()
+  const [type, setType] = useState('entrada');
 
-  const dateTime = new Date()
-  
+ 
   async function InsertData() {
-    await supabase
+    const { data, error } = await supabase
     .from('despesasmes')
     .insert([
       {
-        inserted_at: dateCreated, 
-        title: titleAmount, 
-        amount: amount,
-        category: type,
+        'inserted_at': moment(), 
+        'title': titleAmount, 
+        'amount': amount,
+        'category': type,
       }
-    ]).then(() => {
-      window.alert('sucesso')
-    })
+    ])
+      Fedback(data, error)
+      setTimeout(() => {
+        getData()
+        handleClose() 
+      }, 2500);
   }
   
-  function insertDateTime() {
-    setDateCreated(dateTime)
-    setTimeout(() => {
-      InsertData()
-    }, 2000);
+
+  function Fedback(susses, erro) {
+    if (susses[0]) {
+      return window.alert(`Informação salva com sucesso`)
+    } else if (erro[0]) {
+      return window.alert(`Erro ao enviar informação ${erro}`)
+    }
   }
-
-
 
   const handleChange = (event) => {
     setChecked(event.target.checked);
@@ -55,10 +57,8 @@ export default function ModalTransactions({ open, handleClose }) {
 
   return (
     <Dialog fullWidth maxWidth="sm" open={open} onClose={handleClose}>
-      <div className={styles.TitleModal}>
-        <h4>
-          Inserir dados
-        </h4>
+        <div className={styles.TitleModal}>
+        <h4>Inserir dados</h4>
         <h3 onClick={handleClose}>X</h3>
       </div>
       <div className={styles.ContainerModal}>
@@ -79,7 +79,7 @@ export default function ModalTransactions({ open, handleClose }) {
             id="outlined-adornment-amount"
             value={amount}
             onChange={(e) => {
-              setAmount(e.target.value);
+              setAmount(Number(e.target.value));
             }}
             startAdornment={
               <InputAdornment position="start">R$</InputAdornment>
@@ -110,7 +110,9 @@ export default function ModalTransactions({ open, handleClose }) {
           </FormControl>
         </div>
         <div className={styles.boxBTN}>
-          <button onClick={insertDateTime}
+          <button onClick={() => {
+            InsertData()
+          }}
           className={styles.BTN_SaveTransaction}>
             Salvar
           </button>

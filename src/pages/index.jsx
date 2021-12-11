@@ -4,6 +4,7 @@ const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.
 import Head from 'next/head';
 
 import Dashboard from '../components/DashBoard/DashBord'
+import Header from '../components/Header/Header';
 
 export default function Home() {
   const [body, setBody] = useState([]);
@@ -16,7 +17,6 @@ export default function Home() {
     })
   }
 
-
   useEffect(() => {
     getData()
   }, [])
@@ -26,7 +26,8 @@ export default function Home() {
     <Head>
       <title>Home | family calculator</title>
     </Head>   
-    <Dashboard data={body}/>    
+    <Header getData={getData} />
+    <Dashboard data={body} />    
    </>
   )
 }
