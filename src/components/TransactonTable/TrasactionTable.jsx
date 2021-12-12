@@ -1,6 +1,9 @@
+import { useEffect, useState } from 'react';
+
 
 import moment from 'moment';
-import styles from './style.module.scss'
+import styles from './styleTransaction.module.scss';
+import RowTransaction from './RowTransaction';
 
 export default function TrasactionTable({data}) {
 
@@ -13,24 +16,14 @@ export default function TrasactionTable({data}) {
                         <th>Valor</th>
                         <th>Categoria</th>
                         <th>Data</th>
+                        <th>Detalhes</th>
                     </tr>
                 </thead>
 
                 <tbody>
                     {data.map((dados) => {
                     return (
-                    <tr key={dados.id}>
-                        <td>{dados.title}</td>
-                        <td className={styles.withdraw}>{new Intl.NumberFormat('pt-BR', {
-                            style: 'currency',
-                            currency: 'BRL'
-                        }).format(dados.amount)}
-                        </td>
-                        <td>{dados.category}</td>
-                        <td>
-                        {moment(dados.inserted_at).format("DD/MM/YYYY")}
-                        </td>
-                    </tr>
+                    <RowTransaction dados={dados}/>
                     )
                     })}
                 </tbody>

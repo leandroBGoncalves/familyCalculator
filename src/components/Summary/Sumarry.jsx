@@ -38,7 +38,7 @@ export default function Summary({data}) {
                     <img src="/images/outcome.svg" alt="Saidas"/>
                 </header>
                 <strong>
-                    -500
+                    -{new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'}).format(cardsValues.withdraws)}
                 </strong>
             </div>
             <div className="highlight-background">
@@ -47,7 +47,7 @@ export default function Summary({data}) {
                     <img src="/images/total.svg" alt="Total"/>
                 </header>
                 <strong>
-                    1000
+                {new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'}).format(cardsValues.total)}
                 </strong>
             </div>
         </div>

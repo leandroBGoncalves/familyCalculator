@@ -10,6 +10,7 @@ import {
   RadioGroup,
   Switch,
   TextField,
+  FormHelperText
 } from "@material-ui/core";
 
 import styles from "./styleModal.module.scss";
@@ -79,13 +80,14 @@ export default function ModalTransactions({ open, handleClose, getData }) {
             id="outlined-adornment-amount"
             value={amount}
             onChange={(e) => {
-              setAmount(Number(e.target.value));
+              setAmount(e.target.value);
             }}
             startAdornment={
               <InputAdornment position="start">R$</InputAdornment>
             }
             label="Amount"
           />
+          <FormHelperText id="filled-weight-helper-text">Separe as casas decimais por '.' (Ponto)</FormHelperText>
         </FormControl>
         <div className={styles.interruptors}>
           <FormControlLabel
