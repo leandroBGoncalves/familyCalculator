@@ -1,10 +1,17 @@
 
-import { useEffect, useState } from 'react'
+import moment from 'moment';
+import { useContext, useEffect, useState } from 'react'
+import { AuthContext } from '../../Contexts/AuthContext';
 import styles from './style.module.scss'
 
-export default function Summary({data}) {
+export default function Summary({monthFilter}) {
+    const { body } = useContext(AuthContext);
 
-    const cardsValues = data.reduce((acc, transaction) => {
+    const filterDateMonth = body.filter((data) => {
+        return moment(data.inserted_at).format('MMM') === monthFilter
+    }) 
+
+    const cardsValues = filterDateMonth.reduce((acc, transaction) => {
         if(transaction.category === 'entrada') {
             acc.deposits += transaction.amount;
             acc.total += transaction.amount;

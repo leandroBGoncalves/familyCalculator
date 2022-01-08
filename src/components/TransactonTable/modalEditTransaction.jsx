@@ -23,8 +23,6 @@ export default function ModalEditTransaction({open, handleClose, data}) {
     const [titleAmount, setTitleAmount] = useState(data.title);
     const [type, setType] = useState(data.category);
 
-    console.log(data.amount)
-
     const handleChange = (event) => {
         setChecked(event.target.checked);
       };
