@@ -2,6 +2,7 @@ import { createContext, useState } from "react";
 import { supabase } from "../services/supraClient";
 import { setCookie } from "nookies";
 import Router from "next/router";
+import moment from "moment";
 
 export const AuthContext = createContext({});
 
@@ -22,9 +23,6 @@ export function AuthProvider({ children }) {
   const [body, setBody] = useState([]);
   const [errorData ,setErrorData] = useState(false);
   const [succesData ,setSuccesData] = useState(false);
-
-  const [errorInnerData ,setErrorInnerData] = useState(false);
-  const [succesInnerData ,setSuccesInnerData] = useState(false);
 
   async function getData() {
     setLoading(true)
@@ -102,24 +100,6 @@ export function AuthProvider({ children }) {
     }
   }
 
-  async function InsertData() {
-    const { data, error } = await supabase
-    .from('despesasmes')
-    .insert([
-      {
-        'inserted_at': moment(), 
-        'title': titleAmount, 
-        'amount': amount,
-        'category': type,
-      }
-    ])
-      if(error) {
-        setErrorInnerData(true);
-      } else {
-        setErrorInnerData(false);
-        setSuccesInnerData(true);
-      }
-  }
 
   return (
     <AuthContext.Provider
@@ -142,9 +122,6 @@ export function AuthProvider({ children }) {
         succesData,
         getData,
         body,
-        errorInnerData,
-        succesInnerData,
-        InsertData,
       }}
     >
       {children}

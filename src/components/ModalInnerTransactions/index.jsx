@@ -10,42 +10,71 @@ import {
   RadioGroup,
   Switch,
   TextField,
-  FormHelperText
+  FormHelperText,
+  Alert
 } from "@material-ui/core";
 
-import { supabase } from "../../services/supraClient";
 import { AuthContext } from "../../Contexts/AuthContext";
-import { useForm } from "react-hook-form";
 import moment from "moment";
 import styles from "./styleModal.module.scss";
+import { supabase } from "../../services/supraClient";
 
 
-export default function ModalTransactions({ open, handleClose, getData }) {
-  const { InsertData, succesInnerData, errorInnerData } = useContext(AuthContext);
-  const { register, handleSubmit } = useForm();
+export default function ModalTransactions({ open, handleClose }) {
+  const { getData } = useContext(AuthContext);
   const [amount, setAmount] = useState(0);
   const [checked, setChecked] = useState(false);
   const [titleAmount, setTitleAmount] = useState('');
   const [type, setType] = useState('entrada');
+  const [errorInnerData ,setErrorInnerData] = useState(false);
+  const [succesInnerData ,setSuccesInnerData] = useState(false);
 
-  async function setData(data) {
-    console.log(data)
+  async function InsertData( ) {
+    const { data, error } = await supabase
+    .from('despesasmes')
+    .insert([
+      {
+        'inserted_at': moment(), 
+        'title': titleAmount, 
+        'amount': amount,
+        'category': type,
+      }
+    ])
+      if(error) {
+        setErrorInnerData(true);
+      } else {
+        setErrorInnerData(false);
+        setSuccesInnerData(true);
+        getData()
+        handleClose()
+        setTimeout(() => {
+          setSuccesInnerData(false);
+        }, 3000);
+      }
   }
   
-
   const handleChange = (event) => {
     setChecked(event.target.checked);
   };
 
   return (
     <Dialog fullWidth maxWidth="sm" open={open} onClose={handleClose}>
-        <div className={styles.TitleModal}>
+      <div className={styles.TitleModal}>
         <h4>Inserir dados</h4>
         <h3 onClick={handleClose}>X</h3>
       </div>
-      <form onSubmit={handleSubmit(setData)} className={styles.ContainerModal}>
+      {errorInnerData && (
+        <Alert variant="filled" severity="error">
+          Erro ao Cadastrar! Verifique as informações e tente novamente!
+        </Alert>
+      )}
+      {succesInnerData && (
+        <Alert variant="filled" severity="success">
+          Cadastro realizado com sucesso...
+        </Alert>
+      )}
+      <div className={styles.ContainerModal}>
         <TextField
-          {...register('title')}
           className={styles.inputTitle}
           fullWidth
           value={titleAmount}
@@ -60,7 +89,6 @@ export default function ModalTransactions({ open, handleClose, getData }) {
         <FormControl fullWidth>
           <InputLabel htmlFor="outlined-adornment-amount">Valor</InputLabel>
           <OutlinedInput
-            {...register('amount')}
             id="outlined-adornment-amount"
             value={amount}
             onChange={(e) => {
@@ -83,10 +111,8 @@ export default function ModalTransactions({ open, handleClose, getData }) {
           />
           <FormControl component="fieldset">
             <RadioGroup
-              {...register('type')}
               aria-label="gender"
-              defaultValue="female"
-              
+              defaultValue="female"           
               name="type"
               value={type}
               onChange={(e) => {
@@ -99,12 +125,12 @@ export default function ModalTransactions({ open, handleClose, getData }) {
           </FormControl>
         </div>
         <div className={styles.boxBTN}>
-          <button onSubmit={handleSubmit}
+          <button onClick={InsertData}
           className={styles.BTN_SaveTransaction}>
             Salvar
           </button>
         </div>
-      </form>
+      </div>
     </Dialog>
   );
 }

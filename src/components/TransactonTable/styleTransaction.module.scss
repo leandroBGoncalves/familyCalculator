@@ -29,6 +29,12 @@
     }
 }
 
+.IconClose {
+    font-size: 28px;
+    margin-left: 15px;
+    cursor: pointer;
+}
+
 .ContainerModal {
     display: flex;
     flex-direction: column;
@@ -107,4 +113,28 @@
         border-radius: 4px;
     
 }
+}
+
+.boxBTNDelete {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 5px 20px;
+
+    button {
+        background: #e52e4d;
+        border: none;
+        border-radius: 4px;
+        padding: 3px 5px;
+
+        color: #fff;
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+
+        svg {
+            margin-left: 5px;
+        }
+    }
+
 }

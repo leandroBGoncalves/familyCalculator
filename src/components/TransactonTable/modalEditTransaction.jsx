@@ -1,3 +1,7 @@
+import { useContext, useState } from "react";
+import { AuthContext } from "../../Contexts/AuthContext";
+import { supabase } from "../../services/supraClient";
+import { FaRegTrashAlt, FaRegWindowClose } from 'react-icons/fa';
 import {
     Dialog,
     FormControl,
@@ -9,23 +13,68 @@ import {
     RadioGroup,
     Switch,
     TextField,
-    FormHelperText
+    FormHelperText,
+    Button,
+    CircularProgress,
+    Alert
   } from "@material-ui/core";
+import { IconButton } from 'rsuite';
 
-import moment from "moment";
-import { useState } from "react";
 
-  import styles from './styleTransaction.module.scss';
+import styles from './styleTransaction.module.scss';
 
-export default function ModalEditTransaction({open, handleClose, data}) {
-    const [amount, setAmount] = useState(data.amount);
+export default function ModalEditTransaction({open, handleClose, body }) {
+  const { getData } = useContext(AuthContext);
+    const [amount, setAmount] = useState(body.amount);
+    const [itemId, setItemId] = useState(body.id);
     const [checked, setChecked] = useState(false);
-    const [titleAmount, setTitleAmount] = useState(data.title);
-    const [type, setType] = useState(data.category);
+    const [titleAmount, setTitleAmount] = useState(body.title);
+    const [type, setType] = useState(body.category);
+    const [alertError, setAlertError] = useState(false);
+    const [alertSucces, setAlertSucces] = useState(false);
+    const [confirmDel, setConfirmDel] = useState(false);
+    const [loadingDel, setLoadingDel] = useState(false);
+
 
     const handleChange = (event) => {
         setChecked(event.target.checked);
       };
+
+      async function updateTransaction() {
+        const { data, error } = await supabase
+        .from('despesasmes')
+        .update({ 
+          title: titleAmount,
+          amount: amount,
+          category: type,
+         })
+        .match({ id: itemId })
+        if (error) {
+          setAlertError(true)
+        } else {
+          setAlertError(false)
+          setAlertSucces(true)
+          getData()
+          handleClose()
+          setAlertSucces(false)
+        }
+      }
+      
+      async function DeletItem() {
+        setLoadingDel(true)
+        const { data, error } = await supabase
+        .from('despesasmes')
+        .delete()
+        .match({ id: itemId })
+        if (error) {
+          setLoadingDel(false)
+        } else {
+          setLoadingDel(false)
+          setConfirmDel(false)
+          getData()
+          handleClose()
+        }
+      }
 
   return (
     <Dialog fullWidth maxWidth="sm" open={open} onClose={handleClose}>
@@ -33,6 +82,45 @@ export default function ModalEditTransaction({open, handleClose, data}) {
         <h4>Editar informações</h4>
         <h3 onClick={handleClose}>X</h3>
       </div>
+      <div className={styles.boxBTNDelete}>
+      {confirmDel && 
+      <Alert
+      style={{width: "100%"}}
+      severity="error"
+      action={
+        <>
+        {!loadingDel ? 
+        <Button onClick={DeletItem} color="inherit" size="small">
+          Excluir 
+        </Button> : 
+        <CircularProgress />
+        }
+        <FaRegWindowClose className={styles.IconClose} onClick={() => {setConfirmDel(false)}}/>
+        </>
+      }
+      >
+        Deseja realmente excluir <span>de forma permanente esta transação?</span>
+      </Alert>
+      }
+      {!confirmDel && 
+      <IconButton
+      color="red"
+      onClick={() => setConfirmDel(true)}
+      >
+        Excluir 
+        {<FaRegTrashAlt />}
+      </IconButton>}
+      </div>
+      {alertError && (
+        <Alert variant="filled" severity="error">
+          Erro ao Cadastrar! Verifique as informações e tente novamente!
+        </Alert>
+      )}
+      {alertSucces && (
+        <Alert variant="filled" severity="success">
+          Cadastro atualizado com sucesso...
+        </Alert>
+      )}
       <div className={styles.ContainerModal}>
         <TextField
           className={styles.inputTitle}
@@ -94,6 +182,7 @@ export default function ModalEditTransaction({open, handleClose, data}) {
         </div>
         <div className={styles.boxBTN}>
           <button
+            onClick={updateTransaction}
             className={styles.BTN_SaveTransaction}
           >
             Salvar

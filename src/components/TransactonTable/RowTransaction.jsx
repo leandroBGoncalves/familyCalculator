@@ -41,7 +41,7 @@ export default function RowTransaction({dados}) {
       <ModalEditTransaction
         open={openModalTransaction}
         handleClose={() => setOpenModalTransaction(false)}
-        data={dados}
+        body={dados}
       />
     </tr>
   );
